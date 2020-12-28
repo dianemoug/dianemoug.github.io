@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-12-28T20:51:38Z",
+  "id": "ce-541-ii-to-seepw-for-geotechnical-seepage-modeling",
+  "duration": 43,
+  "title": "CE 541: II to SEEPW for geotechnical seepage modeling",
+  "authors": "Diane Moug",
+  "summary": "In this CL, you'll build a seepage model in SEEPW. You will learn how to build model geometry, define and set soil material models, define and set boundary conditions, check model convergence, and analyze simulation results.",
+  "source": "1vH3kXIPzhcodFy-cIXpzmlp0JBBYVfT9vBPDhuBTA5w",
+  "theme": "ce541",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ce541"
+  ],
+  "tags": [
+    "ce541"
+  ],
+  "url": "ce-541-ii-to-seepw-for-geotechnical-seepage-modeling"
+}

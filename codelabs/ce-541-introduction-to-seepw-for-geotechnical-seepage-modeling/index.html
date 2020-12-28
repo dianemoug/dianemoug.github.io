@@ -1,0 +1,361 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CE 541: Introduction to SEEPW for geotechnical seepage modeling</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="ce-541-introduction-to-seepw-for-geotechnical-seepage-modeling"
+                  title="CE 541: Introduction to SEEPW for geotechnical seepage modeling"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Introduction" duration="0">
+        <p><strong>Last Updated:</strong> 2020-10-29</p>
+<h2 is-upgraded><strong>Geotechnical Seepage Modeling</strong></h2>
+<p>2D seepage modeling is valuable in many engineering applications. Geotechnical engineers use seepage modeling to estimate groundwater flows through structures, or to evaluate stability of water retention structures. Environmental engineers use seepage modeling to analyze contaminant transport or infiltration through landfill covers, for example.</p>
+<p>There are three main objectives from geotechnical seepage models:</p>
+<p><img src="img\93071bbe296a0c55.png"> - seepage rates (e.g., how much flow is expected into an excavation?)</p>
+<p><img src="img\c882d9cc47129f4c.png"> - pore water pressures (important for <img src="img\e6de9f633478a8a9.png">, of course)</p>
+<p><img src="img\9e934a18fc3438c3.png"> - exit gradients (high exit gradients == erosion and instability)</p>
+<h2 is-upgraded><strong>What will you learn in this exercise?</strong></h2>
+<p>In this exercise, you will be introduced to 2D seepage modeling in SEEPW. Throughout the lesson, a dam seepage model will be constructed. </p>
+<p>This lesson includes:</p>
+<ul>
+<li>Defining model geometry,</li>
+<li>Defining and assigning soil material models,</li>
+<li>Defining and assigning boundary conditions, </li>
+<li>Checking model convergence, and</li>
+<li>Analyzing simulated results.</li>
+</ul>
+<h2 is-upgraded><strong>Introduction to example problem</strong></h2>
+<p>The example problem will be addressed throughout this document. The example problem material will be presented in green boxes.</p>
+<aside class="special"><p><strong>Levee example:</strong></p>
+<p>Below is a cross-section of the problem that we will be building throughout this example. The levee was approximately zoned into upstream and downstream shells during construction by placing finer-grained soils from the borrow source on the upstream side and coarser-grained soils from the borrow source on the downstream side. The borrow source was comprised of clayey sands, silty sands, and silty gravels. The upstream and downstream shells have hydraulic conductivities of k1 and k2, respectively. The toe drain was constructed of pea gravel</p>
+<p class="image-container"><img style="width: 610.00px" src="img\71698359c6535cbc.png"></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Getting Started" duration="0">
+        <h2 is-upgraded><strong>Step 1: Download &amp; Install Geo-Studio</strong><img style="width: 160.88px" src="img\d2736c80e04cb586.png"></h2>
+<p><a href="https://www.geoslope.com/learning/downloads" target="_blank"><paper-button class="colored" raised>GeoStudio download</paper-button></a></p>
+<h2 is-upgraded><strong>Step 2: Start SEEP/W with a Student License</strong></h2>
+<p class="image-container"><img style="width: 624.00px" src="img\22dc84be7a30edee.png"></p>
+<aside class="warning"><p><strong>Note: </strong></p>
+<ol type="1" start="1">
+<li>Be sure that <strong>Student License </strong>is selected at the top</li>
+<li><strong>Select Template </strong>lets you select the units system (Imperial/Metric)  </li>
+</ol>
+</aside>
+<h2 is-upgraded><strong>Step 3: Add a New Analysis</strong></h2>
+<p>In the Define Project pane, add a new analysis by selecting the appropriate geometry. You may also need to define an analysis.</p>
+<p class="image-container"><img style="width: 291.50px" src="img\ef20b655102f63ad.png"><img style="width: 287.50px" src="img\15bae0691f040f87.png"></p>
+<aside class="special"><p><strong>Levee example:</strong></p>
+<p>A levee can be effectively analyzed with a 2D model. </p>
+</aside>
+<h2 is-upgraded><strong>Step 4: Select Units and Grid View</strong></h2>
+<h3 is-upgraded><strong>Units</strong></h3>
+<p>Units can be changed by selecting <em>view--&gt;units</em></p>
+<p class="image-container"><img style="width: 145.00px" src="img\eae8dd72ba9d3296.png"></p>
+<h3 is-upgraded><strong>Grid</strong></h3>
+<p>The view grid spacing and options can be changed with <em>view--&gt;grid</em>. It can be useful when drawing the geometry to adjust the background grid based on the problem&#39;s geometry.</p>
+<h2 is-upgraded><img style="width: 192.10px" src="img\c6bf5b76bd80bf0a.png"><img style="width: 184.50px" src="img\b322c3fef4a05711.png"></h2>
+<h2 is-upgraded><strong>Remote Connection for Geostudio</strong></h2>
+<p>GeoStudio is available in the EB-325 and FAB 55-17 MCECS computer labs.</p>
+<p><a href="https://intranet.cecs.pdx.edu/remote_lab/" target="_blank"><paper-button class="colored" raised>https://intranet.cecs.pdx.edu/remote_lab/</paper-button></a></p>
+<aside class="warning"><p><strong>Note:</strong>  You must be on the MCECS VPN to connect to remote desktops.</p>
+<p><a href="https://cat.pdx.edu/services/network/vpn-services/" target="_blank"> https://cat.pdx.edu/services/network/vpn-services/</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Defining Model Geometry" duration="5">
+        <p>Model geometry is made up of points, lines and regions. You can either:</p>
+<ul>
+<li>Draw geometry where you draw the geometry directly on the grid</li>
+<li>Define geometry where you put the coordinates of points in directly, and define lines and regions based on points.</li>
+</ul>
+<h2 is-upgraded><strong>Draw Points</strong></h2>
+<p>Points outline the corners or breaks in your model&#39;s geometry. To place points, select <em>Draw-&gt;Points</em>, then click on the grid where points should be.  </p>
+<p class="image-container"><img style="width: 137.66px" src="img\309ae6df1264670e.png"></p>
+<aside class="warning"><p><strong>Note:</strong> You can edit any point coordinate by using <em>define--&gt;points</em> to see and change all points.<img style="width: 297.50px" src="img\1953735313e0d846.png"></p>
+</aside>
+<aside class="special"><p><strong>Levee example - drawn points: </strong><img style="width: 610.00px" src="img\9120490f1aa2399e.png"></p>
+</aside>
+<h2 is-upgraded><strong>Draw Lines</strong></h2>
+<p>Lines connect two model points. The lines will define model and material boundaries. Boundary conditions will be assigned along the lines.</p>
+<p>Draw the lines by selecting <em>draw--&gt;lines</em> and clicking to connect two points. </p>
+<p>You can edit the points that define a line with the <em>define--&gt;lines</em> option.</p>
+<aside class="special"><p><strong>Levee example - drawn lines: </strong><img style="width: 610.00px" src="img\bb8c77943420dbfd.png"></p>
+</aside>
+<h2 is-upgraded><strong>Draw Regions</strong></h2>
+<p>Regions will be defined by specifying lines that define a region. Material models will be assigned to each region.</p>
+<p>Draw the regions with <em>draw--&gt;region</em> and outline regions that will have a single material model.</p>
+<aside class="special"><p><strong>Levee example - drawn regions:</strong> Define two regions for the levee: an upstream shell and a downstream shell.</p>
+<h3 is-upgraded><img style="width: 610.00px" src="img\d6ce52070c0617f3.png"></h3>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Defining &amp; Assigning Materials" duration="10">
+        <h2 is-upgraded>Defining Material Models</h2>
+<p>We need to use different material models to model hydraulic conductivity and to assign hydraulic properties. Defining material models will allow us to associate different hydraulic conductivities with different soil types.</p>
+<p class="image-container"><img style="width: 157.50px" src="img\82b3128a14662a3.png"></p>
+<ol type="1" start="1">
+<li>Select <em>Add </em>in the Define Materials window. Suggest that the name is either the soil type or name of the soil unit. For example, &#34;silty clay&#34; or &#34;Columbia River alluvium&#34; will provide more information than &#34;unit 1&#34;. </li>
+<li>Specify a name and colour for a soil in your model. </li>
+<li>Select a saturated or saturated/unsaturated soil model.</li>
+<li>Fill in the model properties for your material model.</li>
+</ol>
+<aside class="warning"><p><strong>Note:</strong> Here are some definitions and resources that may be useful.</p>
+<ul>
+<li>Sr = saturation</li>
+<li>θ = volumetric water content = saturation * porosity</li>
+<li>θs = saturated volumetric water content</li>
+<li>θr = residual volumetric water content (θ at high suction values)</li>
+<li>uAEV = suction at air entry (when Sr drops below 100%)</li>
+</ul>
+<p class="image-container"><img style="width: 393.00px" src="img\132dea5e7f3fe177.png"></p>
+<p>Figure 13.111 in Holtz Kovacs and Sheahan (2011)</p>
+</aside>
+<h3 is-upgraded><strong>Selecting material properties</strong></h3>
+<p class="image-container"><img style="width: 624.00px" src="img\13055e8540dafe99.png"></p>
+<p class="image-container"><img style="width: 342.00px" src="img\10a4c4ce7fcf9468.png"></p>
+<p><em>Figure 6.8 in Holtz Kovac &amp; Sheahan (2011)</em></p>
+<p><em>Table 3.4 from Powrie (2015)</em></p>
+<table>
+<tr><td colspan="1" rowspan="1"><p><em>Soil name</em></p>
+</td><td colspan="1" rowspan="1"><p>θs</p>
+</td><td colspan="1" rowspan="1"><p>θr</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Hygiene sandstone</p>
+</td><td colspan="1" rowspan="1"><p>0.250</p>
+</td><td colspan="1" rowspan="1"><p>0.153</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Touchet silt loam</p>
+</td><td colspan="1" rowspan="1"><p>0.469</p>
+</td><td colspan="1" rowspan="1"><p>0.190</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Guelph loam (drying)</p>
+</td><td colspan="1" rowspan="1"><p>0.520</p>
+</td><td colspan="1" rowspan="1"><p>0.218</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Guelph loam (wetting)</p>
+</td><td colspan="1" rowspan="1"><p>0.434</p>
+</td><td colspan="1" rowspan="1"><p>0.218</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Bei netofa clay</p>
+</td><td colspan="1" rowspan="1"><p>0.446</p>
+</td><td colspan="1" rowspan="1"><p>0</p>
+</td></tr>
+</table>
+<aside class="special"><p><strong>Levee example - material models:</strong> For this example, we will need to use the saturated/unsaturated model. This means that the model will account for how hydraulic conductivity decreases as Sr decreases. </p>
+<p>You will need three material models for the clayey sand, silty sand, and silty gravel soils. This example is only going to go through the clayey sand unit.</p>
+<ol type="1" start="1">
+<li>Name the soil unit <em>Silty clay</em> and select a saturated/unsaturated material model</li>
+</ol>
+<p class="image-container"><img style="width: 485.50px" src="img\12ece61c8a38089a.png"></p>
+<ol type="1" start="2">
+<li>Select <strong>&#34;...&#34; </strong>beside the <em>Vol. Water Content Fn:</em> selection. There will be a new <em>Define Vol. Water Content Functions</em> window that appears</li>
+<li>Select <strong>Add </strong>in the <em>Define Vol. Water Content Functions </em>window. This will let you add a function that relates θ to u. Name the new function Silty clay.</li>
+<li>In the <strong>Types </strong>selection list, select <em>Vol WC Data Point Function.</em> The other types are reasonable, but we will use this one for this example.</li>
+<li>Select the <strong>Estimate </strong>button. A new window will appear.</li>
+<li>In the new window, enter the saturated volumetric water content for clayey sand, and select a sample material.</li>
+</ol>
+<h3 is-upgraded><img style="width: 352.14px" src="img\514adadb061930be.png"></h3>
+<ol type="1" start="7">
+<li>Press <strong>OK </strong>and a volumetric water content function will be plotted. You can adjust the x and y-axes to get a better look at the function. When you understand the plots, select <em>close.</em></li>
+</ol>
+<p class="image-container"><img style="width: 522.50px" src="img\2f537f9691782959.png"></p>
+<ol type="1" start="8">
+<li>In the <em>Define Materials</em> window, under the <em>Vol. Water Content Fn:</em> list, select the Clayey sand function that you just defined.</li>
+<li>Now select the &#34;<em>...</em>&#34; next to the <em>Hyd. Conductivity Fn</em> list. A new <em>Define Hydraulic Conductivity Functions</em> window will appear.</li>
+<li>Name the new function &#34;Clayey sand&#34; and select the <strong>Estimate </strong>button. A new window will appear.</li>
+<li>Choose &#34;Van Genuchten&#34; as the <strong>Estimation Method</strong>. </li>
+<li>Select the &#34;Clayey sand&#34; function for <strong>Vol. Water Content Fn</strong><em>.</em></li>
+<li>Enter a saturated horizontal hydraulic conductivity value for <strong>Saturated Kx</strong></li>
+<li>Enter a<strong> Residual Water Conten</strong><em>t </em>value. When everything is entered select <strong>OK</strong><em>.</em></li>
+</ol>
+<p class="image-container"><img style="width: 458.50px" src="img\4c7eb475158ea1c7.png"></p>
+<ol type="1" start="15">
+<li>The relationship between Kx and u is now plotted. Note that the x-axis plots - u values (u &lt; 0 is suction). After you understand the plots, select <strong>Close</strong>.</li>
+<li>You can change the Anisotropy of hydraulic conductivity in the <strong>Ky&#39;/Kx&#39; Ratio</strong> space. For isotropic hydraulic conductivity Ky/Kx = 1.</li>
+<li>Now select the <em>Clayey sand </em>relationship you just defined in the <em>Hyd. Conductivity Fn</em> list. </li>
+</ol>
+<p>Now the material model for <em>Clayey sand</em> has been defined. You can add additional materials with the <em>Add</em> button in the <em>Define Materials</em> window. You will also need to develop material models for the silty sand and silty gravel.</p>
+<p class="image-container"><img style="width: 549.50px" src="img\8288b1f35cd72c29.png"></p>
+</aside>
+<h2 is-upgraded><strong>Assigning Materials to the Model</strong></h2>
+<p>Assigning the materials to the model is where you select where in the model those materials will be. </p>
+<p>Select <em>Draw--&gt;Materials. </em>In the <em>Draw Materials</em> window, select the material model you want to assign then click the region you want to assign that material to.</p>
+<p class="image-container"><img style="width: 446.50px" src="img\6c1dabae3d61eab5.png"></p>
+<aside class="special"><p><strong>Levee example - assign materials: </strong></p>
+<p>The same material is assigned to both regions, assuming that zoning in the dam construction was ineffective.</p>
+<p class="image-container"><img style="width: 610.00px" src="img\f0e0bd9acbff1db.png"></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Defining and Assigning Boundary Conditions" duration="8">
+        <h2 is-upgraded><strong>Defining Boundary Conditions</strong></h2>
+<p>Select <em>Define--&gt;Boundary Conditions</em> and the <em>Define Boundary Conditions </em>will appear.</p>
+<aside class="warning"><p><strong>Note:</strong> There will be two pre-populated boundary conditions. I suggest you just delete these and define your own.  </p>
+</aside>
+<ol type="1" start="1">
+<li>Select <strong>Add--&gt;New Hydraulic BC </strong>in the <em>Define Boundary Conditions </em>window.</li>
+<li>Name the new BC and select the colour.</li>
+<li>Select the <strong>Kind</strong> of boundary condition.</li>
+</ol>
+<aside class="warning"><p><strong>Here are some of the boundary conditions available.</strong></p>
+<ul>
+<li><strong>Water Total Head/Pressure Head.</strong> The  head will be fixed along the boundary. Seepage flux across the boundary will respond to keep the head fixed.</li>
+<li><strong>Water Rate/Water Flux.</strong> The seepage across the boundary will be fixed. The hydraulic total head will respond to maintain that seepage rate. For a no-flow boundary set the rate/flux to 0.</li>
+</ul>
+<p><strong>Note: </strong>The default boundary condition is a No-Flux boundary. </p>
+</aside>
+<aside class="special"><p><strong>Levee example - define boundary conditions: </strong></p>
+<ol type="1" start="1">
+<li>Upstream reservoir.</li>
+</ol>
+<p>Select <em>Water Total Head</em> under <strong>Kind</strong>.</p>
+<p><em>Boundary Condition Type</em> is <strong>Constant</strong>. Enter the reservoir water level of 9.5m as the constant boundary condition.</p>
+<ol type="1" start="2">
+<li>Downstream gravel drain.</li>
+</ol>
+<p>Select <em>Water Total Head</em> under <strong>Kind</strong>.</p>
+<p><em>Boundary Condition Type</em> is <strong>Constant</strong>. We&#39;ll assume that the toe drain is flooded and that the total head remains at 1.0m in the drain.</p>
+<ol type="1" start="3">
+<li>Impermeable clay layer.</li>
+</ol>
+<p>Select <em>Water Flux</em> under <strong>Kind.</strong></p>
+<p><em>Boundary Condition Type </em>is constant and set at 0.</p>
+<ol type="1" start="4">
+<li>Downstream face. In some (poorly designed) conditions, there will be seepage at the downstream face. Therefore, this boundary could be a potential seepage face.</li>
+</ol>
+<p>Select <em>Water Rate</em> under <strong>kind.</strong></p>
+<p>Keep the rate at 0m, and select the box for <strong>Potential Seepage Face Review.</strong></p>
+<p class="image-container"><img style="width: 590.50px" src="img\af14ba6201e1ca01.png"></p>
+</aside>
+<h2 is-upgraded><strong>Assigning Boundary Conditions</strong></h2>
+<p>Select <em>Draw--&gt;Boundary Conditions.</em> With the appropriate BC selected from the <strong>Assign</strong> menu, apply the BC to the desired Line, Region, or Point. </p>
+<p class="image-container"><img style="width: 222.86px" src="img\23e567ee5a54d2fa.png"></p>
+<aside class="special"><p><strong>Levee example - assign boundary conditions: </strong></p>
+<p class="image-container"><img style="width: 610.00px" src="img\4f86c2b6a00b4a5c.png"></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Solving the Model" duration="10">
+        <p>We are going to solve the steady-state model. The solution works through iterations to converge on a steady-state solution of Heads and Fluxes at model nodes.</p>
+<p><br>The model is governed by Bernoulli&#39;s equation and Darcy&#39;s Law.</p>
+<h2 is-upgraded><strong>Generate the Mesh</strong></h2>
+<p>The model builds elements defined by 4 nodes. In the model you have control of the mesh discretization to a certain extent: the Student License limits the model to 500 elements. SeepW will automatically build the mesh based on the specified element size.</p>
+<p>To change the mesh discretization select <em>Draw--&gt;Mesh Properties.</em> Input the <strong>Approximate Global Element Size,</strong> press enter and the mesh will automatically regenerate.</p>
+<p class="image-container"><img style="width: 200.07px" src="img\bbe2ad8ac4c7e464.png"></p>
+<aside class="special"><p><strong>Levee example - generate the mesh: </strong></p>
+<p class="image-container"><img style="width: 610.00px" src="img\8ae29d4e2f397d14.png"></p>
+</aside>
+<h2 is-upgraded><strong>Select Solve Parameters</strong></h2>
+<p>The numerical solve parameters can be checked and changed before solving the problem. To select the parameter select the <strong>Define Project</strong> button.</p>
+<p class="image-container"><img style="width: 342.50px" src="img\b5fdd8d9a32a967a.png"></p>
+<p>Select the <strong>Water </strong>tab. This tab allows you to specify many different solve parameters and to change some of the water parameters.</p>
+<p>The model iterates through Head values at model nodes to find a solution. Convergence is determined when Head at a node when (a) the pressure head difference between subsequent iterations is smaller than the <em>Max. Pressure Head Difference, </em>and (b) subsequent iterations are the same to the <em>Significant Digits Equal</em> value.</p>
+<aside class="special"><p><strong>Levee example - solve parameters: </strong></p>
+<p class="image-container"><img style="width: 610.00px" src="img\71c1a92b3098b7ab.png"></p>
+</aside>
+<h2 is-upgraded><strong>Start Solver</strong></h2>
+<p>In the <strong>Solve Manager </strong>pane, select the <strong>Start </strong>button.</p>
+<p class="image-container"><img style="width: 305.30px" src="img\58d28abb61e5d285.png"></p>
+<p>If the solution is successful, it will automatically go to the <strong>Results</strong> tab.</p>
+<aside class="special"><p><strong>Levee example - solved solution: </strong></p>
+<p class="image-container"><img style="width: 610.00px" src="img\86c6ee000dc16d23.png"></p>
+</aside>
+<h2 is-upgraded><strong>Checking Convergence</strong></h2>
+<p>Check the convergence by selecting <em>View--&gt;Preferences.</em> In the <em>Preferences</em> select <strong>Node Convergence</strong>.</p>
+<p class="image-container"><img style="width: 511.50px" src="img\ab4841d566dd93d1.png"></p>
+<p>You can also plot the number of unconverged nodes versus iterations. </p>
+<ol type="1" start="1">
+<li>In the <strong>Results </strong>pane, select <em>Draw Graph</em>.</li>
+<li><strong>Add</strong> a new graph and give it a name.</li>
+<li>In the <strong>Kind </strong>list, select <em>Convergence (each iteration).</em></li>
+<li>This will plot the unconverged pressure head nodes versus the iterations.</li>
+</ol>
+<aside class="special"><p><strong>Levee example - convergence: </strong></p>
+<p>The solution should fully converge at each node.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Plotting Results" duration="10">
+        <h2 is-upgraded><strong>Contours</strong></h2>
+<p>You can plot contours in the <strong>Solution</strong> pane by selecting the <strong>Contour</strong> button or selecting <em>Draw--&gt;Contours. </em>The <em>Draw Contours</em> window should appear.</p>
+<p>Select <strong>Add</strong> to add a new contour plot. </p>
+<p class="image-container"><img style="width: 481.50px" src="img\ee014f6e4d58c816.png"></p>
+<p>You can also add labels to the contour by selecting the label button.</p>
+<p class="image-container"><img style="width: 122.00px" src="img\5cb34b66412aa9b4.png"></p>
+<p><strong>Flow lines</strong> can be added by selecting the <em>Flow Lines</em> button and then clicking at points on the plot.</p>
+<p class="image-container"><img style="width: 110.00px" src="img\6cc0adb5777ab603.png"></p>
+<aside class="special"><p><strong>Levee example - contours: </strong></p>
+<p>Total Head Contours:</p>
+<p class="image-container"><img style="width: 610.00px" src="img\dd15fe52a11d105c.png"></p>
+<p>Flow Lines:</p>
+<p class="image-container"><img style="width: 610.00px" src="img\141b8e0918c756b2.png"></p>
+</aside>
+<h2 is-upgraded><strong>Graphs</strong></h2>
+<p>Make plots along within the solution by selecting <em>Draw--&gt; Graph</em> in the <strong>Solution Pane.</strong></p>
+<p>Spatial plots can be made along lines, points, or regions in the model. You can make these by selecting <strong>Mesh</strong> in the <em>Kind </em>list, and then pushing the <strong>Set Locations </strong>button<strong>. </strong></p>
+<p class="image-container"><img style="width: 206.50px" src="img\f15f7807d0eb45d3.png"></p>
+<aside class="special"><p><strong>Levee example - plot pressure along base: </strong></p>
+<ul>
+<li>Add a new plot and call it &#34;Pore Pressure&#34;</li>
+<li>In the <em>Kind</em> list select <strong>Mesh</strong></li>
+<li>Select <strong>Set locations</strong> in the <em>Draw Graph </em>window.</li>
+<li>Toggle the selection to <strong>Select Custom Location</strong></li>
+<li>Draw a line along the model base by holding the shift key.</li>
+</ul>
+<p class="image-container"><img style="width: 610.00px" src="img\90ccda3196dbfeed.png"></p>
+<ul>
+<li>Click <strong>Show Graph...</strong>this should bring you back to the <em>Draw Graph</em> window</li>
+<li>You can select what is plotted along this line. Try selecting <strong>Pore Pressure, Water Pressure</strong> vs. <strong>Distance.</strong></li>
+</ul>
+<p class="image-container"><img style="width: 610.00px" src="img\bb41390b659a586a.png"></p>
+<p>Now you can select different lines to look at other field variables from the solution.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
