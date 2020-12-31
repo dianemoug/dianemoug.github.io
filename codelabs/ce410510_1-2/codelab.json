@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-12-31T20:18:08Z",
+  "id": "ce410510_1-2",
+  "duration": 32,
+  "title": "CE 410/510: 1.2 Start Using FLAC 8.1",
+  "authors": "Diane Moug",
+  "summary": "This tutorial provides an introduction to using FLAC 8.1. The objectives of this tutorial are to introduce you to running and interpreting single element geotechnical analyses in FLAC.",
+  "source": "1LxmDNQ2i673XChQ9INQN4oOYZOZgcHdgL4-wVb7cM2Q",
+  "theme": "ce410510-1",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "CE410510_1"
+  ],
+  "tags": [
+    "flac"
+  ],
+  "feedback": "https://forms.gle/GDxs8NdVjt2pyUGS7",
+  "ga": "G-M8WF2872WE",
+  "url": "ce410510_1-2"
+}

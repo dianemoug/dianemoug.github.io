@@ -1,0 +1,223 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CE 410/510: 1.1 Introduction to FLAC</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid="G-M8WF2872WE"
+                  id="ce410510_1-1"
+                  title="CE 410/510: 1.1 Introduction to FLAC"
+                  environment="web"
+                  feedback-link="https://forms.gle/WewBx5apU6ehkwNq9">
+    
+      <google-codelab-step label="Introduction" duration="2">
+        <p><strong>Last Updated:</strong> 2020-12-29</p>
+<p><strong>References: </strong>FLAC 8.1 User&#39;s Manual; FLAC 8.1 Theory &amp; Background</p>
+<h2 is-upgraded><strong>What is FLAC?</strong></h2>
+<p>FLAC is a finite difference platform for modeling 2-dimensional geotechnical engineering problems. The model package comes with material models including: linear-elastic, linear elastic perfectly plastic, and modified cam clay. We will be using several of these models in the class.</p>
+<p>FLAC is a continuum program where the model is discretized by continuous zones. The model geometry will update with calculated strains by using the large deformation mode.</p>
+<aside class="special"><p><strong>Example of a FLAC model: </strong>this is an example of model of a footing on soil</p>
+<p class="image-container"><img style="width: 427.50px" src="img\ba19c41fdd91d1d0.png"></p>
+<p>This model might analyze:</p>
+<ul>
+<li>How much settlement is expected from the footing load</li>
+<li>How does settlement change if soil properties change</li>
+<li>How does settlement change if the load changes</li>
+</ul>
+</aside>
+<p>FLAC uses an explicit formulation for solving problems. The explicit solution means that calculations are performed over small timesteps, where each timestep moves towards equilibrium. This is in contrast to an implicit formulation, where the problem is iterated until an equilibrium solution is found. </p>
+<p>FLAC stands for:</p>
+<ul>
+<li>Fast</li>
+<li>Lagrangian</li>
+<li>Analysis of </li>
+<li>Continuua</li>
+</ul>
+<h2 is-upgraded><strong>What will we learn in FLAC throughout this class?</strong></h2>
+<p>Throughout the class we will be learning about theoretical soil models. This theory will allow us to calculate increments of strain that result from stress increments applied to soil. Although we will learn how to analytically (i.e., with pencil and paper) estimate stress, strain or porewater pressures that result from loading on soil, we will also be doing the same analyses in FLAC. This will allow you to: perform numerical geotechnical analyses, examine simulated results in FLAC, and check that your numerical and analytical solutions agree.</p>
+<h3 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h3>
+<ul class="checklist">
+<li>change model parameters to reflect changes in soil properties or loading conditions</li>
+<li>extract simulation results</li>
+<li>change boundary conditions</li>
+<li>change model geometry</li>
+<li>simulate 1D compression, isotropic compression, and triaxial compression loading conditions</li>
+<li>simulate soil behavior with linear elastic and elasto-plastic material models</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Model Geometry &amp; Discretization" duration="10">
+        <p>The soil is modeled as a continuum that is divided into quadrilateral <strong><em>zones</em></strong> that are defined by 4 <strong><em>gridpoints.</em></strong></p>
+<ul>
+<li>Zones and gridpoints are referenced by <em>i</em> and <em>j</em> indexes</li>
+<li>The indexes start at 1</li>
+<li>Gridpoint positions are designated by <em>x</em> and <em>y</em> coordinates</li>
+</ul>
+<aside class="warning"><p><strong>Note: </strong></p>
+<p>FLAC uses model zones and gridpoints (as opposed to model elements and nodes).</p>
+</aside>
+<aside class="special"><p>This is an example of a dam modeled in FLAC. The geomaterials that make up the dam and foundation are divided into model zones. These zones are defined by four gridpoints. </p>
+<p>Dividing the model into zones allows stresses and strains to be calculated for each zone. It also allows different soil properties to be assigned to each zone.</p>
+<p class="image-container"><img style="width: 453.50px" src="img\68b039c56af6ca7a.png"></p>
+</aside>
+<h2 is-upgraded><strong>Example quiz for model geometry</strong></h2>
+<p>Below I have put together some example questions. You can follow <a href="https://docs.google.com/forms/d/e/1FAIpQLSeGUvgoBq2XNBwB3btY44R_VdWcsuwRiq8vwV8Gi2Jr7aEf1w/viewform?usp=sf_link" target="_blank">this link</a> to answer the questions and check your answers.</p>
+<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSeGUvgoBq2XNBwB3btY44R_VdWcsuwRiq8vwV8Gi2Jr7aEf1w/viewform?usp=sf_link" target="_blank"><paper-button class="colored" raised>FLAC Geometry Quiz</paper-button></a></p>
+<p class="image-container"><img style="width: 299.00px" src="img\4fbdf7e8e511ca15.png"></p>
+<p>FLAC Graphic User Interface showing a model grid of 5 x 14 zones. The model coordinates are shown along the x and y axes.</p>
+<p><strong>Identify the coordinates for the specified gridpoint in the above model:</strong></p>
+<p><em>x(i = 2, j = 2) = _________________                x( i = 3, j = 1) = ________________</em></p>
+<p><em>y(i = 2, j = 2) = _________________                y(i = 3, j = 1) = _________________</em></p>
+<p><strong>Label the model zones:</strong></p>
+<ul>
+<li><em>i = 5, j = 6</em></li>
+<li><em>i = 1, j = 11</em></li>
+<li><em>i = 2, j = 1</em></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="FLAC Calculation Cycle" duration="10">
+        <p>FLAC computation is performed over a calculation cycle. Each calculation cycle is carried out over one time step. Each time step/calculation cycle attempts to bring the model closer to equilibrium. </p>
+<p class="image-container"><img style="width: 500.00px" src="img\3377cb256f03ca.png"></p>
+<h2 is-upgraded><strong>Calculate unbalanced gridpoint forces</strong></h2>
+<p>The stresses in each zone are used to estimate equivalent forces at each gridpoint.  </p>
+<p class="image-container"><img src="img\70d6558669f11a04.png"></p>
+<p class="image-container"><img style="width: 391.50px" src="img\4973e64489b7fe68.png"></p>
+<p>When the model is in equilibrium, the gridpoint forces are balanced. This step estimates the unbalanced gridpoint forces in the x and y direction.</p>
+<h2 is-upgraded><strong>Calculate gridpoint acceleration from gridpoint forces</strong></h2>
+<p>To step closer to equilibrium, the model assigns accelerations at gridpoints to counteract unbalanced forces. This uses the equation of motion:</p>
+<p class="image-container"><img src="img\b9a908597e833405.png"></p>
+<p>Mass is lumped at gridpoints from the model zone&#39;s density.</p>
+<h2 is-upgraded><strong>Calculate strain rates from velocities</strong></h2>
+<p>Since gridpoint accelerations are applied for a timestep (𝚫t), a finite difference approximation can be used to find velocities at each gridpoint. The gridpoint velocities relate to the strain rates in the model zones - <em>it is assumed that there is a constant strain rate across each zone.</em></p>
+<p>Ultimately, this step yields a strain increment for the zone.</p>
+<aside class="special"><p class="image-container"><img style="width: 157.00px" src="img\4e4cde9381a87ecd.png"></p>
+<p><em>Strain increment = strain rate * timestep</em></p>
+</aside>
+<h2 is-upgraded><strong>Calculate stresses in each zone</strong></h2>
+<p>Constitutive relationships relate the strain increment to a stress increment. These stress increments get added to the zone&#39;s stress at the beginning of the calculation cycle. Then the calculation cycle repeats and the model steps towards equilibrium.</p>
+<aside class="warning"><p><strong>Note: </strong></p>
+<p>The primary role of a constitutive model is to relate strain increments to stress increments.</p>
+</aside>
+<h2 is-upgraded><strong>Calculation cycle &amp; timestep</strong></h2>
+<aside class="special"><p>This is what you will see as FLAC cycles:</p>
+<p class="image-container"><img style="width: 383.00px" src="img\27dc12fdf1e16861.png"></p>
+<ul>
+<li><strong>Step:</strong> number of calculation steps taken place</li>
+<li><strong>Unbalanced force:</strong> maximum unbalanced gridpoint force</li>
+<li><strong>Equilibrium ratio:</strong> ratio of maximum unbalanced force to internal force</li>
+<li><strong>Problem time:</strong> simulated time</li>
+<li><strong>Timestep:</strong> the size of the timestep in seconds - note how small it is! The model remains stable partly because the timestep is so small.</li>
+</ul>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Displacement, Velocity &amp; Acceleration" duration="5">
+        <p>This section will cover model <strong>displacement</strong>, <strong>velocity</strong>, and <strong>acceleration</strong>. All of these field variables are calculated at <strong>gridpoints</strong>. Displacement is represented by <em>u</em>. </p>
+<aside class="warning"><p><strong>Sign conventions for displacement, velocity, and acceleration vectors: </strong></p>
+<p class="image-container"><img style="width: 91.00px" src="img\919dd40805e81425.png"></p>
+</aside>
+<h2 is-upgraded><strong>Gridpoint displacement</strong></h2>
+<p><img src="img\e835090587992417.png">displacement in the <em>x</em> direction</p>
+<p class="image-container"><img style="width: 96.50px" src="img\686207d5a91c41fe.png"></p>
+<p><img src="img\232a3dc2a5f849d8.png">displacement in the y direction</p>
+<p class="image-container"><img style="width: 87.33px" src="img\d4031dee127d2d4e.png"></p>
+<aside class="special"><p><strong>Vector example:</strong></p>
+<p class="image-container"><img style="width: 127.00px" src="img\dd7e938807a5b14e.png"></p>
+</aside>
+<h2 is-upgraded><strong>Gridpoint velocity</strong></h2>
+<p class="image-container"><img style="width: 462.50px" src="img\33fc3f2546c77f9.png"></p>
+<h2 is-upgraded><strong>Gridpoint acceleration</strong></h2>
+<p class="image-container"><img style="width: 487.50px" src="img\e4ffc93f003949d8.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Stress and Strain in Model Zones" duration="5">
+        <p>This section is going to dive a bit deeper into the mechanics of FLAC. For the most part, you won&#39;t need to know this information to use FLAC. But, as an engineer, you should understand how the model works to be an informed user.</p>
+<h2 is-upgraded><strong>Mixed discretization</strong></h2>
+<p>When using FLAC, we see quadrilateral zones. These zones are actually further discretized by four overlapping, constant-strain, constant-stress, <strong><em>sub-triangles.</em></strong> The figure below shows one zone and the four overlapping sub-triangles that make up the zone.</p>
+<h3 is-upgraded><img style="width: 313.00px" src="img\4f7dbe93c4acf5b1.png"></h3>
+<aside class="warning"><p><strong>Why does FLAC use &#34;mixed-discretization&#34; with overlapping sub-triangles? </strong><em>(Marti &amp; Cundall 1982)</em></p>
+<ul>
+<li>Quadrilateral zones are prone to instability through &#34;hour-glassing&#34;</li>
+</ul>
+<p class="image-container"><img style="width: 338.00px" src="img\c60442bb2d92e9f9.png"></p>
+<ul>
+<li>Triangle elements are too stiff</li>
+<li>Mixed discretization is a compromise between quadrilateral and triangle elements</li>
+</ul>
+</aside>
+<p>Mixed discretization is implemented by:</p>
+<ul>
+<li>Assigning common isotropic strain (<img src="img\6b23d267b52aceac.png">) for all sub-triangles in a zone</li>
+<li>Average the isotropic strain from the sub-triangles and assign the average to all the sub-triangles</li>
+<li>Keeping shear strains unique to each sub-triangle </li>
+</ul>
+<h2 is-upgraded><strong>Constant strain triangles</strong></h2>
+<p>Gridpoint displacements and velocities are assumed to vary linearly across sub-triangles. Therefore, strains and strain-rates are constant in a sub-triangle.</p>
+<p>The constant strain is achieved by assuming displacement fields are linear across a subzone:</p>
+<p class="image-container"><img src="img\b48be5fcba9082de.png"></p>
+<p class="image-container"><img src="img\952571c43ea67f0.png"></p>
+<p><img style="width: 624.00px" src="img\bdbe8fdbc0d844f5.png">from R. Armstrong</p>
+<p>Since sub-triangles are constant strain, they are also constant stress.</p>
+<h3 is-upgraded><strong>Calculating strain from displacements</strong></h3>
+<p>The general strain expression is:</p>
+<p class="image-container"><img style="width: 167.00px" src="img\ac0dbd3291a2800.png"></p>
+<p>Normal strain in the x-direction:</p>
+<p class="image-container"><img style="width: 250.00px" src="img\480fc5ca22e193b4.png"></p>
+<p>Normal strain in the y-direction:</p>
+<p class="image-container"><img style="width: 265.50px" src="img\7ec91634e136ef5.png"></p>
+<p>Shear strain:</p>
+<p class="image-container"><img style="width: 194.00px" src="img\5652bdc3e13a12eb.png"></p>
+<h3 is-upgraded><strong>Calculating strain rates from displacements</strong></h3>
+<p>The general strain rate expression is:</p>
+<p class="image-container"><img style="width: 189.50px" src="img\2718bd542694518e.png"></p>
+<p>Normal strain rate in the x-direction:</p>
+<p class="image-container"><img style="width: 113.00px" src="img\6451e681078786df.png"></p>
+<p>Normal strain rate in the y-direction:</p>
+<p class="image-container"><img style="width: 131.83px" src="img\50f6e5cf2864c275.png"></p>
+<p>Shear strain rate:</p>
+<p class="image-container"><img style="width: 218.50px" src="img\ba4c9cf14bff7bdc.png"></p>
+<h2 is-upgraded><strong>Stresses</strong></h2>
+<p>Stresses are assigned to the model zones based on constitutive relationships to the strain increments. FLAC estimates the horizontal, vertical and shear stresses for each sub-triangle, then averages the sub-triangle stresses to assign stresses for the whole zone. Effective stresses are calculated from total stresses and porewater pressures.</p>
+<aside class="warning"><p><strong>Sign conventions for stresses:</strong> Note that compressive stresses are negative by FLAC&#39;s sign convention.</p>
+<p class="image-container"><img style="width: 215.00px" src="img\544836c4b364b666.png"></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

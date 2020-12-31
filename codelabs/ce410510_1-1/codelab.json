@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-12-31T20:18:00Z",
+  "id": "ce410510_1-1",
+  "duration": 32,
+  "title": "CE 410/510: 1.1 Introduction to FLAC",
+  "authors": "Diane Moug",
+  "summary": "This tutorial provides an introduction to the theory and background of FLAC 8.1.",
+  "source": "1bb1haeCSepOBmZI6tHOPEiuuivkNnDsok4fTbU29Avk",
+  "theme": "ce410510-1",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "CE410510_1"
+  ],
+  "tags": [
+    "flac"
+  ],
+  "feedback": "https://forms.gle/WewBx5apU6ehkwNq9",
+  "ga": "G-M8WF2872WE",
+  "url": "ce410510_1-1"
+}
