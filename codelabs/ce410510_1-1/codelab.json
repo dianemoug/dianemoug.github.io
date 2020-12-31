@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-12-31T20:18:00Z",
+  "updated": "2020-12-31T21:42:05Z",
   "id": "ce410510_1-1",
   "duration": 32,
   "title": "CE 410/510: 1.1 Introduction to FLAC",
@@ -15,10 +15,10 @@
     "draft"
   ],
   "category": [
-    "CE410510_1"
+    "ce410510_1"
   ],
   "tags": [
-    "flac"
+    "ce410510_1"
   ],
   "feedback": "https://forms.gle/WewBx5apU6ehkwNq9",
   "ga": "G-M8WF2872WE",
