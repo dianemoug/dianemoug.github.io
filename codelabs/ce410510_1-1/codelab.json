@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2020-12-31T21:42:05Z",
+  "updated": "2021-01-01T00:28:17Z",
   "id": "ce410510_1-1",
   "duration": 32,
   "title": "CE 410/510: 1.1 Introduction to FLAC",
@@ -18,7 +18,9 @@
     "ce410510_1"
   ],
   "tags": [
-    "ce410510_1"
+    "ce410510",
+    "flac",
+    "geotech"
   ],
   "feedback": "https://forms.gle/WewBx5apU6ehkwNq9",
   "ga": "G-M8WF2872WE",
