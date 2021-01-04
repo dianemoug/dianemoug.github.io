@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-01T01:18:00Z",
+  "updated": "2021-01-04T01:13:24Z",
   "id": "541_seepw",
   "duration": 43,
   "title": "CE 541: Introduction to SEEPW for geotechnical seepage modeling",
@@ -22,6 +22,6 @@
     "seepw"
   ],
   "feedback": "https://forms.gle/hz2xLdEjHMTkQ1hV7",
-  "ga": "G-M8WF2872WE",
+  "ga": "G-QFG9F5EW2F",
   "url": "541_seepw"
 }
