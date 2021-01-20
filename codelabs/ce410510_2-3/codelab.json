@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-01-20T23:35:42Z",
+  "id": "ce410510_2-3",
+  "duration": 7,
+  "title": "CE 410/510: 2.3 FLAC Initial Conditions",
+  "authors": "dmoug",
+  "summary": "This tutorial provides information on changing the model geometry. This includes how to initialize the number of model zones and how to change gridpoint positions.",
+  "source": "1vXYJCQJHPju4F-wUqmkbiQrQ04hITlnnzE9hVKto1qs",
+  "theme": "ce410510-2",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ce410510_2"
+  ],
+  "tags": [
+    "ce410510",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdNvu64Z9L-OBDUrSRkBaNX1BZ-gjAYO74SuujRSabej0wW1w/viewform?usp=sf_link",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce410510_2-3"
+}
