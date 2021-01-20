@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2021-01-13T23:55:22Z",
+  "updated": "2021-01-20T21:07:13Z",
   "id": "ce410510_2-1",
   "duration": 37,
   "title": "CE 410/510: 2.1 FLAC Boundary Conditions",
@@ -22,7 +22,7 @@
     "flac",
     "geotech"
   ],
-  "feedback": "https://forms.gle/iXXAigbXShrzUyH88",
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLScrw7bhVZ6mjLxmlPKS7pHp-yNuQ-VsHD6uzl-lDIYGK2_h3Q/viewform?usp=sf_link",
   "ga": "G-QFG9F5EW2F",
   "url": "ce410510_2-1"
 }
