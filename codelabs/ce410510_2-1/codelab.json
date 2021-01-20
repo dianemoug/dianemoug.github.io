@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-01-13T23:55:22Z",
+  "id": "ce410510_2-1",
+  "duration": 37,
+  "title": "CE 410/510: 2.1 FLAC Boundary Conditions",
+  "authors": "dmoug",
+  "summary": "This tutorial provides information on boundary conditions in FLAC 8.1. The objectives of this tutorial are to describe boundary conditions for geotechnical modeling in FLAC, and how to assign and change boundary conditions in FLAC.",
+  "source": "1VhYyHxxblwaNPfs7jEaEmbo2VCsowT2GrOMKQqYrJYo",
+  "theme": "ce410510-1",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ce410510_1"
+  ],
+  "tags": [
+    "ce410510",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://forms.gle/iXXAigbXShrzUyH88",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce410510_2-1"
+}
