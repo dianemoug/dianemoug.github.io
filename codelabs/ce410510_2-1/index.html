@@ -185,8 +185,8 @@ apply syy $syy j=gpj
 fix y j=1  
 fix x i=1   ;;;not necessary bc/ axisymmetry
 
-apply $p i=gpi
-apply $p j=gpj        </code></pre>
+apply sxx $p i=gpi
+apply syy $p j=gpj        </code></pre>
 <p>These commands assume that $p has been previously defined in a fish function.</p>
 <h2 is-upgraded><strong>Triaxial compression </strong></h2>
 <p class="image-container"><img style="width: 543.50px" src="img\b2d16cc8a93bfda2.png"></p>
@@ -196,15 +196,15 @@ apply $p j=gpj        </code></pre>
 fix y j=1  
 fix x i=1   ;;;not necessary bc/ axisymmetry
 
-apply $sxx i=gpi
-apply $syy j=gpj        </code></pre>
+apply sxx $sxx i=gpi
+apply syy $syy j=gpj        </code></pre>
 <p>These commands assume that $sxx and $syy were previously defined in a fish function.</p>
 <h2 is-upgraded>Direct simple shear</h2>
 <p class="image-container"><img style="width: 383.50px" src="img\9e0b1d8dcb697f5a.png"></p>
 <pre><code>config
 
 fix x y j=1  
-apply $syy j=gpj
+apply syy $syy j=gpj
 
 fix x i=1 j=gpj
 fix x i=gpi j=gpj
