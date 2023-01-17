@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-01-17T00:40:15Z",
+  "id": "ce421521_1-1",
+  "duration": 32,
+  "title": "CE 421/521: 1.1 Introduction to FLAC",
+  "authors": "dmoug",
+  "summary": "This tutorial provides an introduction to the theory and background of FLAC 8.1.",
+  "source": "1bb1haeCSepOBmZI6tHOPEiuuivkNnDsok4fTbU29Avk",
+  "theme": "ce421521-1",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "ce421521_1"
+  ],
+  "tags": [
+    "ce421521",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdOl6JnkgMzLd91c1xipBb05GQV8aKL130LHtc0cqC_w7eP5w/viewform?usp=sf_link",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce421521_1-1"
+}

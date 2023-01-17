@@ -1,0 +1,13 @@
+{
+  "title": "Geotechnical Engineering at Portland State University",
+  "description": "This is a collection of tutorials to get started using FLAC 8.1 and SeepW",
+  "tags": [],
+  "categories": [],
+  "exclude": [
+    "^lang-.*"
+  ],
+  "logoUrl": "/images/psugeotechlogo.png",
+  "toolbarBgColor": "#37474F",
+  "sort": "mainCategory",
+  "pins": []
+}
