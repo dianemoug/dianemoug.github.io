@@ -1,0 +1,192 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CE 421/521: 1.3 Troubleshooting in FLAC</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid="G-QFG9F5EW2F"
+                  id="ce421521_1-3"
+                  title="CE 421/521: 1.3 Troubleshooting in FLAC"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSd6N8jcuDYIN19kJJ28UN8EgP6mxvYHMGHkA17E55CG-81NmA/viewform?usp=sf_link">
+    
+      <google-codelab-step label="Introduction" duration="2">
+        <p><strong>Last Updated:</strong> 2023-01-16</p>
+<p><strong>References: </strong>FLAC 8.1 Manual: User&#39;s Guide; Command Reference; Fish in FLAC</p>
+<p>This tutorial is aimed to help you recognize and resolve errors in your FLAC model. Sometimes the errors will be obvious, such as when the model just doesn&#39;t run, or the errors will not be as apparent. I try to point out common errors you will run into so that you don&#39;t have to spend hours troubleshooting.</p>
+<p>This is not an exhaustive list of possible errors. If you run into something that is not included, please send it to me and I will  include it in an updated version of this document.</p>
+<h2 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h2>
+<ul class="checklist">
+<li>Connecting error messages in FLAC with errors in FISH scripts</li>
+<li>Recognizing common errors in FISH scripts</li>
+<li>Re-running a model after resolving errors</li>
+</ul>
+<aside class="warning"><p><strong>Keep in mind:</strong></p>
+<p>There will always be a solution for the error you are encountering. I have been heavily using FLAC for 10 years and I have always been the reason my model doesn&#39;t run or doesn&#39;t run properly.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 1: Use Good Modeling Practices" duration="10">
+        <p>Even if your model runs, that does not mean that errors are not present. You will want to develop good modeling habits, including verification, to check that you have quality inputs to your model. Below are sections of things to think about for each model you run.</p>
+<h2 is-upgraded><strong>Are the assigned model properties reasonable?</strong></h2>
+<p>The values that you select for your model properties need to be reasonable and reflect typical values. If you are unsure of reasonable values, look to resources like textbooks, manuals, or examples of published modeling projects.</p>
+<p><strong>Are the intended model property values assigned?</strong></p>
+<p>Often model property values are calculated from other input values. For example, dry density may be calculated from specific gravity and void ratio values; if the calculations are not written correctly, this would cause a bad input value.</p>
+<p>After model properties are initialized you should pause the simulation and print the values to make sure they are correctly assigned. You can find the list of model property names by selecting <em>Plot, Model</em> then in the Plot Items window, expanding <em>Properties</em> and the model you are using. If there are bad values, check for typos and that variables are referenced consistently.</p>
+<p class="image-container"><img style="width: 534.46px" src="img\\e1672b4bb913b15f.png"></p>
+<pre><code>;; for example, with the Mohr-Coulomb model, you can enter the following in the command consol ;;
+
+print bulk
+print shear
+print cohesion
+print tension
+print dilation
+print friction
+print state</code></pre>
+<p><strong>Are the initial conditions reasonable and assigned as intended?</strong></p>
+<p>Just like model property values, initial values also need to be reasonable. The initial values include total stresses (sxx, syy, szz) and pore water pressure (pp). The values must represent reasonable geotechnical stress conditions, and should yield reasonable effective stress values.</p>
+<p>After the model has been initialized and before timestepping, you should pause the simulation and <code>print</code> the total stresses, effective stresses and porewater pressures to make sure the values are reasonable and assigned as intended.</p>
+<p><code>print sxx; print syy; print szz; print pp; print esxx; print esyy; print eszz</code></p>
+<aside class="warning"><p><strong>Remember!</strong></p>
+<ul>
+<li>Compressive stresses are negative in FLAC.</li>
+<li>Positive pore water pressures represent positive pressure head in FLAC; negative porewater pressures represent suction/capillary tension.</li>
+<li>You will need to keep this convention in mind when calculating effective stresses, total stresses, and porewater pressures in FLAC.</li>
+</ul>
+</aside>
+<h2 is-upgraded><strong>Are the boundary conditions correct?</strong></h2>
+<p>The assigned boundary conditions must represent the loading conditions. Incorrect boundary conditions may lead to errors in the model or the model may run but the results will be incorrect. The latter will require your critical thinking and engineering judgment to recognize boundary condition errors. This section provides guidance if incorrect boundary conditions are preventing your model from running.</p>
+<h3 is-upgraded><strong>Static equilibrium</strong></h3>
+<p>One check on your boundary conditions is whether the model quickly reaches static equilibrium. After model properties, initial conditions, and boundary conditions are assigned, but before applying loads, the model should be brought to static equilibrium. The <code>solve</code> command will step the model to static equilibrium. </p>
+<h3 is-upgraded><strong>After static equilibrium</strong></h3>
+<p>A way to check that the loading boundary conditions are correct is to cycle through a small number of timesteps and check that the gridpoint velocities and displacements are reasonable. You can do this by pausing the scripts or commenting them out after the loading boundary conditions, and entering the <code>step</code> command into the console. For example: </p>
+<p><code>Step 10 </code></p>
+<p>After those steps, check the gridpoint velocities to see that they are as expected. The example below is for a 1D compression simulation.</p>
+<p class="image-container"><img style="width: 477.63px" src="img\\4f78e59a0d995fe6.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 2: Identify the error" duration="5">
+        <p>Sometimes FLAC tells you what the error is, sometimes you need to troubleshoot to figure out what the error is. Use the clues in the error messages to help figure out what the error is.</p>
+<h2 is-upgraded><strong>Compilation &amp; Execution Errors</strong></h2>
+<p>These are the errors where FLAC cannot execute the scripts. FLAC will stop execution when the erroneous line of script is encountered. Look in the Console for the type of error. In the example below, it is a &#34;Command not recognized&#34; error, meaning that there is a type in the command <code>aptly,</code> which should be <code>apply.</code></p>
+<p class="image-container"><img style="width: 475.33px" src="img\\a9bbc893444974af.png"></p>
+<h2 is-upgraded><strong>Model run errors</strong></h2>
+<p>If <strong>initial conditions</strong>, <strong>boundary conditions</strong>, or <strong>model properties</strong> are not properly assigned, the model will not run as intended. This may include:</p>
+<ul>
+<li>Bad geometry</li>
+<li>Not reaching equilibrium</li>
+<li>Erroneous stress-strain paths</li>
+<li>Free-falling </li>
+<li>Pancaking</li>
+</ul>
+<p>These can be more difficult to identify than execution errors. For these errors you will want to look at the model velocity or displacement vectors and see if they are as expected for the condition you are trying to model. For these errors, first check that your boundary conditions and initial conditions are correct.</p>
+<p>Below is an example of what pancaking looks like. It was caused by bad boundary conditions at the right boundary. </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\b5684db49f069589.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 3: Locate the error" duration="5">
+        <p>This part focuses on finding where the error is in the FISH scripts so the error can be corrected.</p>
+<h2 is-upgraded><strong>Command error</strong></h2>
+<p>Errors may happen in a command line or in the FISH scripts. For both types of errors, it is useful to have &#34;echo&#34; turned on (<code>echo on)</code>. The echo command reads out the called file and the scripted commands into the console and gives the error when the erroneous command line is encountered.</p>
+<p>In the GUI console, look at where the model stopped running. In the example below, the error occurs from a typo in the history parameter assignment (should be unbal not unbalo). From looking at the console, you can see that the FLAC could not run that command line and therefore stopped running.</p>
+<p class="image-container"><img style="width: 490.89px" src="img\\ad449c6f7d958e1e.png"></p>
+<h2 is-upgraded><strong>Fish Compilation or Execution Error</strong></h2>
+<p>Fish compilation errors happen within FLAC&#39;s user defined language. As opposed to command errors, the model will not necessarily stop reading out at the erroneous line. This means that you may have to do some digging to find the error line. </p>
+<p>The model often will not run if:</p>
+<ul>
+<li>Parentheses are not balanced in a calculation</li>
+<li>Usually a quick fix by adding the missing parenthesis</li>
+<li>Divide by zero</li>
+<li>Often a FISH variable typo since they have a default value of zero</li>
+<li>Often a calculation error</li>
+<li>Use the <code>print</code> command to check the FISH variable values</li>
+</ul>
+<h3 is-upgraded><strong>Example of locating a divide by zero error</strong></h3>
+<aside class="special"><p class="image-container"><img style="width: 535.00px" src="img\\fb4b10f13b8c1b5.png"></p>
+<ul>
+<li>We see that it is a divide by zero error, however we do not know which line of code it occurs in. </li>
+<li>We see that the error occurred in a line of code within the <code>$stresses_strains</code> user-defined function because that is the last command line put into FLAC. </li>
+</ul>
+<p>I suggest looking at the calculations in <code>$stresses_strains</code> and checking any denominator values for possible zeros. Possible zero denominators are <code>$Ho</code> and <code>$R0</code>. The next step would be to <code>print $Ho</code> and <code>print $R0</code> to see if either of them are zero.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Step 4. Resolve the Error" duration="2">
+        <p>This is often the shortest step; usually figuring out what and where the error is takes the most time. This step is usually just fixing a typo, saving the file, and then re-running the model (and maybe running into the next error). </p>
+<p>If you are having trouble saving the .fis file, see the Common Errors section.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Common Error: Save Failed" duration="3">
+        <p>Often .fis files cannot be saved when they are edited after running into a FLAC error. In Notepad++ the error will look like this:</p>
+<p class="image-container"><img style="width: 298.64px" src="img\\b50d34a023652b7f.png"></p>
+<p>This happens because the file is still open in FLAC - FLAC didn&#39;t finish running through the file because it ran into the error. To save the changes to the .fis file, you will need to tell FLAC to start a new model: type &#34;new&#34; in the FLAC command line and press enter.</p>
+<p class="image-container"><img style="width: 308.10px" src="img\\fa19688c473c57d.png"></p>
+<p>You should now be able to call the .fis model from FLAC.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Common Error: Zero or Negative Density" duration="3">
+        <p>This error will occur as the model is timestepping. A &#34;zero or negative density in one or more zones&#34; message will occur in the console. A &#34;communication thread exception&#34; message may come up as well. </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\90ad23305f39066b.png"></p>
+<h2 is-upgraded><strong>Where is the bad density value?</strong></h2>
+<p>You can track down which zone is the problem by using the print command with density. This can be useful to understand what caused the error. In the example below, the problem zone is i=2 j=1.</p>
+<p><code>print density</code></p>
+<p class="image-container"><img style="width: 624.00px" src="img\\802bbea3477d7912.png"></p>
+<h2 is-upgraded><strong>When did the error occur?</strong></h2>
+<p>When the error occurs gives a hint of what caused the error.</p>
+<ul>
+<li>Error occurs on the first timestep.</li>
+<li>An initial density value is bad.</li>
+<li>Print density values to see which zones have bad values; assign new values if necessary.</li>
+<li>Error occurs after some timestepping.</li>
+<li>Check the model geometry. If there is a bad boundary condition, then the model volume may get very large compared to the mass.</li>
+</ul>
+<h2 is-upgraded><strong>What are the bad density values?</strong></h2>
+<p>The erroneous density values provide a clue to why the value is bad. </p>
+<ul>
+<li>Density = 0</li>
+<li>Density &lt; 0</li>
+<li>If density is being assigned with a fish variable, check that there are no spelling errors or calculation errors. </li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

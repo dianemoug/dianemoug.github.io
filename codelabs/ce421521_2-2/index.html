@@ -1,0 +1,218 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CE 421/521: 2.2 FLAC Initial Conditions</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid="G-QFG9F5EW2F"
+                  id="ce421521_2-2"
+                  title="CE 421/521: 2.2 FLAC Initial Conditions"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLSeTZfpZ1juOhfABepHk9bsrTtIChPeFG1fcTX_EDQ-sWPYwGw/viewform?usp=sf_link">
+    
+      <google-codelab-step label="Introduction" duration="2">
+        <p><strong>Last Updated:</strong> 2020-01-11</p>
+<p><strong>References: </strong>FLAC 8.1 Manual: User&#39;s Guide Problem Solving with FLAC; Command Reference; Fish in FLAC</p>
+<p>This tutorial will provide background on how to initialize stress and porewater pressure conditions in FLAC. The tutorial will also cover user-defined FISH functions for estimating these initial conditions.</p>
+<h2 is-upgraded><strong>What are initial conditions?</strong></h2>
+<p>Anytime we model a geotechnical problem in FLAC, we need to specify initial conditions. The initial conditions are generally:</p>
+<ul>
+<li>Initial total stresses</li>
+<li>Initial porewater pressures</li>
+<li>Initial gridpoint velocities</li>
+</ul>
+<p>We are going to focus on initial stresses and porewater pressures since initial gridpoint velocities were mostly covered in 2.1 FLAC Boundary Conditions.</p>
+<p>Initial conditions are assigned throughout the model, interior to the model boundaries.</p>
+<aside class="warning"><p><strong>Remember!</strong></p>
+<p>Initial conditions should be consistent with assigned boundary conditions. For example, if a vertical stress of 100 kPa is applied at the bottom boundary, then the initial vertical stress at the bottom of the model should also be 100 kPa.</p>
+</aside>
+<h2 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h2>
+<ul class="checklist">
+<li>How to define initial conditions with user-defined fish functions</li>
+<li>How to initialize stress conditions</li>
+</ul>
+<p>This tutorial does not discuss groundwater flow boundary conditions. These will come in future classes!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Defining initial conditions" duration="5">
+        <p>It is very useful to specify the initial conditions in a user-defined fish function. This makes it easy to change simulation parameters and make sure that they are consistent in other parts of the model.</p>
+<p>For example, if you are simulating a laboratory triaxial compression test with total vertical stress = 200 kPa, ko = 0.5, and initial pore pressure = 100, a function to define parameters might look like:</p>
+<pre><code>def $problem_definitions 
+   $ko = 0.5           ;;[], lateral coefficient of stress
+   $syy_ini = -200.    ;;[kPa], initial total axial stress
+   $pp_ini = 100.      ;;[kPa], initial porewater pressure
+
+
+   ;;;calculate initial radial stress from $ko, $syy_ini, and $pp_ini
+   $esyy_ini = $syy_ini + $pp_ini    ;;[kPa], initial effective axial stress
+   $esxx_ini = $esyy_ini*ko     ;;[kPa], initial effective radial stress
+   $sxx_ini = $esxx_ini - $pp_ini  ;;[kPa], initial total radial stress
+
+end
+$problem_definitions</code></pre>
+<aside class="special"><p>For programming in fish:</p>
+<p><code>;</code> denotes comments</p>
+<p><code>def $problem_definitions</code></p>
+<p><code>...</code></p>
+<p><code>end</code></p>
+<p>Defines the function. To carry the function out, you will need to call the function <code>$problem_definitions</code>. In this example above it is being called right after the function is defined, but could be called anytime after the function is defined.</p>
+</aside>
+<aside class="warning"><p><strong>Remember!</strong></p>
+<p>Compressive stresses and negative (opposite of what we usually use in geotech), but pore pressures below the watertable are positive (what we usually use in geotech). Be careful of this when doing calculations with effective stresses in FISH.</p>
+</aside>
+<p><strong>Side note on boundary conditions: </strong>Using a program definition like this means that you can also use these parameters for boundary conditions. Since this is triaxial compression loading, the boundary conditions would be:</p>
+<p><code>apply sxx $sxx_ini i=gpi j=1,gpj</code></p>
+<p><code>apply syy $syy_ini i=1,gpi j=gpj</code></p>
+<p><code>fix x i=1</code></p>
+<p><code>fix y j=1</code></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Assigning initial conditions" duration="5">
+        <p>The initial conditions must be assigned before the simulations are carried out. There are a few things to keep in mind:</p>
+<ul>
+<li>Initial conditions are assigned through FLAC commands. </li>
+<li>Total stresses and porewater pressures are initialized, therefore effective stresses result from these initializations.</li>
+</ul>
+<p>The <code>ini</code> command is used for this. If the stresses are uniform throughout the model, then you don&#39;t need to give a gridpoint range. For example:</p>
+<p><code>ini sxx $sxx_ini</code></p>
+<p><code>ini syy $syy_ini</code></p>
+<p><code>ini szz $szz_ini</code></p>
+<p><code>ini pp $pp_ini</code></p>
+<p>If stress gradients need to be initialized for a soil profile, then the <code>var</code> command is included with <code>ini</code>.</p>
+<pre><code>define $problem_definition
+        $K0 = 0.5                                ;[], consolidation ratio
+        $grav = 10.
+     $wt_depth = 0.     ;[m], depth from surface to water table
+        $Ho = 6.5                ;[m], model height
+        
+
+     $void_ratio = 1.2        ;[]
+        $rho_water = 1.                ;[Mg/m^3]
+        $Gs = 2.5                        ;[],rho_solids/rho_water (specific gravity of solids)
+        ;;calculate the bulk density from specific gravity, water density, and void ratio
+        $rho_total = ($Gs*$rho_water+($void_ratio))/(1.+$void_ratio)                        ;[Mg/m^3]        
+end
+$problem_definition        
+
+def $initial_conditions
+
+        $syy_bot = -1.*$Ho*$rho_total*$grav   ;;[kPa], total vertical stress at the bottom of the model
+        $syy_var = -1.*$syy_bot - 0.   ;;[kPa], difference between total vertical stress at the top of the model and bottom of the model
+        $pp_bot = ($Ho-$wt_depth)*$rho_water*$grav  ;;[kPa], pore pressure at the bottom of the model
+        $pp_var = -1*$pp_bot   ;;[kPa], difference between porewater pressure at the bottom of the model and top of the model
+        
+        $syy_p_bot = $pp_bot + $syy_bot ;;[kPa], vertical effective stress at bottom
+        
+        $sxx_p_bot = $syy_p_bot*$K0  ;;[kPa], horiz. Effective stress at bottom
+        $sxx_bot = $sxx_p_bot - $pp_bot ;;[kPa], horiz. Total stress at bottom
+        $sxx_var = -1.*$sxx_bot
+        
+        
+        command
+                ini pp $pp_bot         var 0.,$pp_var           j=1,$zj  ;;$zj is number of zones in the j direction
+                ini syy $syy_bot                 var 0.,$syy_var        j=1,$zj
+                ini sxx $sxx_bot                var 0.,$sxx_var        j=1,$zj
+                ini szz $sxx_bot                var 0.,$sxx_var         j=1,$zj
+        
+        end_command        
+
+end
+$initial_conditions
+</code></pre>
+<p>For this example, the <code>ini</code> commands are called from within the $initial_conditions user-defined function.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Examples" duration="5">
+        <h2 is-upgraded><strong>Laboratory element simulations</strong></h2>
+<p>Laboratory element simulations capture the loading conditions we test soil under in the lab. This is characterized by assuming uniform stresses throughout the element. Often we capture these conditions with single element simulations (using only one model zone).</p>
+<p>This example is applicable to simulations of triaxial compression, direct simple shear, triaxial extension, 1D compression, and other laboratory test conditions.</p>
+<p class="image-container"><img style="width: 378.73px" src="img\\3614581873349b2e.png"></p>
+<pre><code>def $ini_conditions
+        $syy_ini = 125.                ;[kPa], initial total vertical stress
+        $sxx_ini = 175.                ;[kPa], initial total horizontal stress
+        $pp_ini = 50.                ;[kPa], initial porewater pressure
+        
+        command
+                ini sxx $sxx_ini
+                ini syy $syy_ini
+                ini szz $sxx_ini
+                ini pp         $pp_ini
+        end_command
+end
+$ini_conditions</code></pre>
+<h2 is-upgraded><strong>Field conditions</strong></h2>
+<p>In most geotechnical field conditions, we need to account for the stress gradients with depth. </p>
+<p class="image-container"><img style="width: 326.02px" src="img\\7908e470be7314da.png"></p>
+<pre><code>def $prob_defs
+
+        $rho_total = 1.8                ;[Mg/m^3], total density
+        $top_elev = 0.                ;[m], elevation of top of model boundary
+        $bot_elev = -10.        ;[m], elevation of model bottom boundary
+        $rho_water = 1.0                ;[Mg/m^3], water density
+        
+        $ko = 0.5                                ;[], lateral stress coefficient
+                
+        $grav = 10.                                ;[m/s^2], gravitational acceleration
+
+end
+$prob_defs
+
+def $ini_conditions
+        $syy_bot = ($top_elev - $bot_elev)*$rho_total*$grav                ;[kPa], total vertical stress at bottom boundary
+        $pp_bot = -1.($top_elev - $bot_elev)*$rho_water*$grav        ;[kPa], pore pressure at bottom boundary
+        $sxx_bot = ($ko*($syy_bot + $pp_bot))-$pp_bot        ;[kPa], total horizontal stress at bottom boundary
+                
+        $syy_var = -1.*$syy_bot        ;[kPa], variation of syy between top and bottom boundary
+        $sxx_var = -1.*$sxx_bot        ;[kPa], variation of sxx between top and bottom boundary
+        $pp_var = -1.*$pp_bot        ;[kPa], variation of pp between top and bottom
+end
+$ini_conditions
+
+ini pp $pp_bot                 var 0.,$pp_var j=1,jzones
+ini sxx $sxx_bot         var 0.,$sxx_var j=1,jzones
+ini szz $sxx_bot         var 0.,$szz_var j=1,jzones
+ini syy $syy_bot         var 0.,$syy_var j=1,jzones
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Review Quiz" duration="0">
+        <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSd2y9NNLDoLFHOTXDUMhIuLV4k4oD6XSywfOuICSdeqOUMihQ/viewform?usp=sf_link" target="_blank"><paper-button class="colored" raised>Initial conditions review quiz</paper-button></a></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

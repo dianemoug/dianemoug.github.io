@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-01-17T22:04:38Z",
+  "id": "ce421521_2-3",
+  "duration": 12,
+  "title": "CE 421/521: 2.3 FLAC Geometry",
+  "authors": "dmoug",
+  "summary": "This tutorial provides information on changing the model geometry. This includes how to initialize the number of model zones and how to change gridpoint positions.",
+  "source": "1vXYJCQJHPju4F-wUqmkbiQrQ04hITlnnzE9hVKto1qs",
+  "theme": "ce421521-2",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ce421521_2"
+  ],
+  "tags": [
+    "ce421521",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSdNvu64Z9L-OBDUrSRkBaNX1BZ-gjAYO74SuujRSabej0wW1w/viewform?usp=sf_link",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce421521_2-3"
+}

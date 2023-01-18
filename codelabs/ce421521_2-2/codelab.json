@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-01-17T22:03:59Z",
+  "id": "ce421521_2-2",
+  "duration": 17,
+  "title": "CE 421/521: 2.2 FLAC Initial Conditions",
+  "authors": "dmoug",
+  "summary": "This tutorial provides information on initializing stresses in a model. The objectives of this tutorial are to describe initial conditions that can be assigned, how to estimate them in FLAC, and how to assign variable initial stress conditions.",
+  "source": "1fg0tNinDO6J8gXFtmlOBrDKx55ut_uo2bY9S5SVP168",
+  "theme": "ce421521-2",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ce421521_2"
+  ],
+  "tags": [
+    "ce421521",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSeTZfpZ1juOhfABepHk9bsrTtIChPeFG1fcTX_EDQ-sWPYwGw/viewform?usp=sf_link",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce421521_2-2"
+}

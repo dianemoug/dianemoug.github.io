@@ -1,0 +1,233 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CE 421/521: 2.1 FLAC Boundary Conditions</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid="G-QFG9F5EW2F"
+                  id="ce421521_2-1"
+                  title="CE 421/521: 2.1 FLAC Boundary Conditions"
+                  environment="web"
+                  feedback-link="https://docs.google.com/forms/d/e/1FAIpQLScrw7bhVZ6mjLxmlPKS7pHp-yNuQ-VsHD6uzl-lDIYGK2_h3Q/viewform?usp=sf_link">
+    
+      <google-codelab-step label="Introduction" duration="5">
+        <p><strong>Last Updated:</strong> 2020-01-11</p>
+<p><strong>References: </strong>FLAC 8.1 Manual: User&#39;s Guide Problem Solving with FLAC; Command Reference; Fish in FLAC</p>
+<p>This tutorial will provide background on the types of boundary conditions available in FLAC, and how these boundary conditions are implemented and changed when using FLAC.</p>
+<h2 is-upgraded><strong>What are model boundaries?</strong></h2>
+<p>Boundary conditions are applied at the boundaries of models.  So, in order to determine what boundary conditions best represent your problem, we first have to define what model boundaries are. Model boundaries can be either <em>real</em> or <em>artificial</em>.</p>
+<ul>
+<li><em>Real boundaries</em> are those that physically exist for the modeled problem.</li>
+<li><em>Artificial boundaries</em> are those that we approximate to simplify the problem. For geotechnical models, the bottom boundary is often an artificial boundary since soil and rock extend very deep below the ground surface. For example, instead of modeling the full extent of soil beneath a building, a modeller will choose a depth far enough beneath the building to act as the bottom boundary of the model.</li>
+</ul>
+<p class="image-container"><img style="width: 451.31px" src="img\\6b6068f5ada3a233.png"></p>
+<aside class="special"><p>As you develop more experience as a modeler, you will become more comfortable identifying appropriate boundary types and boundary conditions for your problems.</p>
+<p>When you are verifying your model, you will want to make sure that there aren&#39;t boundary effects. For example, it is good practice to try expanding the dimensions of your model and see if the solution is affected.</p>
+</aside>
+<h2 is-upgraded><strong>Types of boundary conditions</strong></h2>
+<p>There are two main types of boundary conditions that we will discuss: <em>displacement-controlled</em> and <em>stress-controlled</em>. </p>
+<ul>
+<li><em>Displacement-controlled</em> prescribes gridpoint displacement at the boundary. This includes not allowing the boundary to move, or programming the boundary to displace a specific direction and distance during the simulation.</li>
+<li><em>Stress-controlled</em> applies a stress across boundary gridpoints.</li>
+</ul>
+<aside class="warning"><p><strong>Remember!</strong></p>
+<p>Boundary conditions must be applied in both the x- and y-directions at a boundary, but it does not need to be the same boundary condition-type. For example, your model may require that gridpoints are fixed in the y-direction (not allowed to move) and a stress is applied in the x-direction.</p>
+</aside>
+<h2 class="checklist" is-upgraded><strong>What you&#39;ll learn</strong></h2>
+<ul class="checklist">
+<li>How to apply displacement controlled boundary conditions</li>
+<li>How to apply stress or force controlled boundary conditions</li>
+<li>How to determine appropriate boundary conditions</li>
+<li>Boundary conditions for simulating 1D compression, isotropic compression, and triaxial loading conditions</li>
+</ul>
+<p>This tutorial does not discuss groundwater flow boundary conditions. These will come in future classes!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Displacement-controlled boundaries" duration="10">
+        <p>Displacement-controlled boundaries are applied at the model gridpoints. Essentially, you are telling the gridpoint how to move. <strong><em>But, instead of directly applying a displacement, you are applying a velocity at the gridpoints.</em></strong></p>
+<aside class="special"><p><strong>Hint: </strong>Think of <code>fix</code> as &#34;fixed velocity&#34; as opposed to &#34;fixed position&#34;. If you do want to fix the gridpoint position and not allow it to move, then you should fix the velocity at 0.</p>
+</aside>
+<p>The displacement-controlled boundary condition is specified with the <code>fix</code> command. </p>
+<p>For example:        </p>
+<p><code>fix x y j=1</code><img style="width: 264.27px" src="img\\ae3c3045a05f429a.png"></p>
+<p>This tells FLAC the type of boundary condition (displacement-controlled), the direction of the boundary conditions (in both the x and y-directions), and the location of the boundary (at all gridpoints where j=1).</p>
+<h2 is-upgraded><strong>Applying boundary velocity</strong></h2>
+<p>Once the <code>fix</code> command is given to FLAC, the velocity applied at those gridpoints should be specified. </p>
+<p>The velocity sign conventions are:</p>
+<p class="image-container"><img style="width: 128.50px" src="img\\a84bac74156c6723.png"></p>
+<p>Velocities can be assigned with the initialize (<code>ini</code>) command or by assigning velocities through a FISH user-defined function.</p>
+<h3 is-upgraded><strong>Initialize command</strong></h3>
+<p>The initialize command will assign velocities to gridpoints through a FLAC command. This is useful if velocities are not changing throughout the simulation.</p>
+<p><code>fix x y j=1</code></p>
+<p><code>ini yvel 0.1 j=1</code></p>
+<p><code>ini xvel 0. j=1</code></p>
+<p>This series of commands will apply a y-velocity of 0.1 along bottom gridpoints, and keeps the gridpoints fixed in the x-direction.</p>
+<h3 is-upgraded><strong>Assign velocities in FISH function </strong></h3>
+<p>The fish functions can be useful if you want to change the velocity throughout the simulation. This is most useful if you need to ramp-up or ramp-down velocities.</p>
+<p>For example, a fish function to increase the applied y-velocity along bottom gridpoints and keep the gridpoints fixed in the x-direction:</p>
+<pre><code>fix x y j=1   ;;; displacement boundary condition at bottom gps 
+
+def $ramp_up_velocity 
+   $y_vel_max = 0.1
+   $intervals = 100
+   
+   loop $k (1,$intervals)
+       $y_vel = $y_vel_max*($k/$intervals)
+       
+       $j = 1    
+       loop $i (1,gpi)
+           yvel($i,$j) = $y_vel
+          xvel($i,$j) = 0.
+       end_loop
+    end_loop
+end
+$ramp_up_velocity        </code></pre>
+<aside class="special"><p><strong>Hints: </strong></p>
+<ul>
+<li>FISH functions open with <code>def</code> and close with <code>end.</code> This separates FLAC commands from FISH functions.</li>
+<li>It is useful to name FISH functions ($ramp_up_velocity) with a $ to keep track of them</li>
+<li>It is useful to name FISH variable with a $ to keep track of them (e.g., $y_vel_max)</li>
+<li>loops and other logic can only be used within a FISH function (cannot be used as a FLAC command)</li>
+</ul>
+</aside>
+<h2 is-upgraded>No-displacement boundaries</h2>
+<p>No-displacement boundaries are a type of displacement-controlled boundary. For no-displacement boundaries, the gridpoints are fixed in place.</p>
+<p>For example:</p>
+<p><code>fix x y i=1 </code></p>
+<p><code>ini yvel 0. i=1</code></p>
+<p><code>ini xvel 0. i=1</code></p>
+<p class="image-container"><img style="width: 370.50px" src="img\\b370599e866b7593.png"></p>
+<p>This tells FLAC the type of boundary condition (displacement-controlled) is applied at i=1 and that velocity is 0. at those gridpoints.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Stress-controlled boundaries" duration="5">
+        <p>Stress-controlled boundaries can be applied along any boundary. The stress tensor components can be applied at a boundary (<code>sxx</code> for horizontal total stress, <code>syy</code> for vertical total stress, <code>szz</code> for out of plane stress, and <code>sxy</code> for shear stress).</p>
+<p>The stress-controlled boundary is applied with the <code>apply</code> command in FLAC across gridpoints.</p>
+<p>For example:</p>
+<p><code>apply syy -100. j=11</code></p>
+<p class="image-container"><img style="width: 180.77px" src="img\\3ec7ff5902ccf4af.png"></p>
+<p><code>apply sxx -50. i=1 i=1,5</code></p>
+<p class="image-container"><img style="width: 292.50px" src="img\\3fd2f6082df99fd0.png"></p>
+<aside class="warning"><p><strong>Remember!</strong></p>
+<p>In FLAC, compressive stresses are negative and tensile stresses are positive.</p>
+<p>For geotech problems, we will most often use compressive stress boundary conditions.</p>
+</aside>
+<h2 is-upgraded><strong>Gradients at stress boundaries</strong></h2>
+<p>Many geotechnical problems involve stress boundaries since vertical and horizontal stresses increase with depth. For a lot of this class we will not simulate problems with stress gradients, but the final assignment will require stress gradients.</p>
+<p>To apply a stress gradient along a boundary, the <code>var</code> command is required. </p>
+<p><code>apply sxx -200. var 0,200. from j=1,11 i=1</code></p>
+<p><code>apply sxx -200. var 0,200. from j=1,11 i=11</code></p>
+<p class="image-container"><img style="width: 336.96px" src="img\\41f832e86ad833e.png"></p>
+<p>This command starts by applying sxx=200 at i=1 j=1 and i=11, j=1, then linearly increases sxx by 200 by the time the boundary reaches j=1.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Additional Information" duration="2">
+        <p>There are a few things to keep in mind for assigning boundary conditions in FLAC:</p>
+<ul>
+<li>You cannot have a displacement boundary condition and stress boundary condition in the same direction for the same points. If this is assigned, the last command will supersede previous commands. For example, for the following commands, the boundary condition in the x-direction will be a displacement boundary condition.</li>
+</ul>
+<p><code>app sxx $sxx i=1 j=1,gpj</code></p>
+<p><code>ini xvel -1. i=1</code></p>
+<ul>
+<li>You can combine a displacement and stress-controlled boundary condition if they are in different directions. For example, the following boundary conditions for the j=1 boundary is permissible.</li>
+</ul>
+<p><code>app syy $syy j=1 i=1,gpi</code></p>
+<p><code>ini xvel 0.5 j=1</code> </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Examples of boundary conditions for idealized loading conditions" duration="15">
+        <h2 is-upgraded><strong>1D compression </strong></h2>
+<p>These are example boundary conditions for 1D compression where the vertical stress is increased throughout the simulation. </p>
+<p>A fish-function should be used to increase/decrease the vertical load ($syy) throughout the simulation.</p>
+<p class="image-container"><img style="width: 249.90px" src="img\\b847d118de87aceb.png"></p>
+<pre><code>config axisymmetry
+
+fix x y j=1  
+ini yvel 0. j=1
+ini xvel 0. j=1
+
+fix x i=1   ;;;not necessary bc/ axisymmetry
+
+fix x i=gpi
+
+apply syy $syy j=gpj  i=1,gpi
+        </code></pre>
+<h2 is-upgraded><strong>Isotropic compression </strong></h2>
+<p>This example assumes axisymetric geometry for isotropic compression. The simulation takes an element from the isotropic compression test that is bounded by the radial symmetric and vertical symmetric boundaries.</p>
+<p class="image-container"><img style="width: 531.50px" src="img\\66e40070f8d730cb.png"></p>
+<pre><code>config axisymmetry
+
+fix y j=1  
+fix x i=1   ;;;not necessary bc/ axisymmetry
+
+apply sxx $p i=gpi j=1,gpj
+apply syy $p j=gpj i=1,gpi        </code></pre>
+<p>These commands assume that $p has been previously defined in a fish function.</p>
+<h2 is-upgraded><strong>Triaxial compression </strong></h2>
+<p class="image-container"><img style="width: 543.50px" src="img\\b2d16cc8a93bfda2.png"></p>
+<p>This example assumes axisymetric geometry. The simulation takes an element that is bounded from the radial symmetric boundary (the central axis) and the vertical symmetric boundary. Therefore, assuming this symmetry, the simulated element represents conditions throughout the test.</p>
+<pre><code>config axisymmetry
+
+fix y j=1  
+fix x i=1   ;;;not necessary bc/ axisymmetry
+
+apply sxx $sxx i=gpi j=1,gpj
+apply syy $syy j=gpj i=1,gpi        </code></pre>
+<p>These commands assume that $sxx and $syy were previously defined in a fish function.</p>
+<h2 is-upgraded>Direct simple shear</h2>
+<p class="image-container"><img style="width: 383.50px" src="img\\cedc097ff0f5233.png"></p>
+<pre><code>config
+
+fix x y j=1  
+apply syy $syy j=gpj i=1,gpi
+
+fix x i=1 j=gpj
+fix x i=gpi j=gpj
+
+attach aside from 1,gpj to 1,1 bside from gpi,gpj to gpi,1 </code></pre>
+<p>This introduces the <code>attach</code> command. The command in this case ensures that the two vertical boundaries move in-sync and keeps the constraint of no radial strain.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Review Quiz" duration="0">
+        <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSckq7JcsevNOmNoqhavFWvHnmPubGnfgvM6fYmD9SAfWQGRnw/viewform?usp=sf_link" target="_blank"><paper-button class="colored" raised>Boundary conditions review quiz</paper-button></a></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

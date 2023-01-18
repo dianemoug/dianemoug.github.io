@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2023-01-18T03:48:36Z",
+  "id": "ce421521_1-3",
+  "duration": 30,
+  "title": "CE 421/521: 1.3 Troubleshooting in FLAC",
+  "authors": "dmoug",
+  "summary": "This tutorial provides guidance for troubleshooting models and scripts in FLAC.",
+  "source": "15LRASUU8_SG_Lgl4mR2BGsqfjV7POhdCAyj6YmYdsKo",
+  "theme": "ce421521-1",
+  "status": [
+    "unpublished"
+  ],
+  "category": [
+    "ce421521_1"
+  ],
+  "tags": [
+    "ce421521",
+    "flac",
+    "geotech"
+  ],
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSd6N8jcuDYIN19kJJ28UN8EgP6mxvYHMGHkA17E55CG-81NmA/viewform?usp=sf_link",
+  "ga": "G-QFG9F5EW2F",
+  "url": "ce421521_1-3"
+}
